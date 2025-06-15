@@ -1,0 +1,34 @@
+{
+    "name": "GemControls",
+    "maps": [
+        {
+            "name": "Base",
+            "id": "30870b04-1623-4470-9706-5049f838b751",
+            "actions": [
+                {
+                    "name": "Swipe",
+                    "type": "Value",
+                    "id": "a2db1930-c70a-4656-a676-ba47c368eaab",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5cce2de4-0f62-42a6-a5d6-f67287ec0a4b",
+                    "path": "<Touchscreen>/primaryTouch",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Swipe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
