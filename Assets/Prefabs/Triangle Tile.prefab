@@ -11,8 +11,10 @@ GameObject:
   - component: {fileID: 6630978875927719428}
   - component: {fileID: 1467762065538190949}
   - component: {fileID: -6818186811279295899}
-  - component: {fileID: -3350959806269920779}
   - component: {fileID: 3200611780689339302}
+  - component: {fileID: -8769208045438932698}
+  - component: {fileID: -709015142407586224}
+  - component: {fileID: 4365036056678485663}
   m_Layer: 0
   m_Name: Triangle Tile
   m_TagString: Triangle
@@ -29,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 5340235630351650466}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.08, y: 6.33, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -126,18 +128,6 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.4
---- !u!114 &-3350959806269920779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5340235630351650466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfc405db33769a34ab435912c121fc8b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3200611780689339302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,3 +158,40 @@ MonoBehaviour:
   m_DefaultActionMap: Base
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &-8769208045438932698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5340235630351650466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc59ada78b40b084b80d2dd474a442a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-709015142407586224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5340235630351650466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45a5480a4cd05994bae8b541d3dda08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4365036056678485663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5340235630351650466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d097cbc4e7ef97a4293f5c2454051856, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeAsName: triangle
