@@ -49,7 +49,7 @@ public class SpawnManager : MonoBehaviour
         for (int i = 0; i < countOfTilesToSpawn; i++)
         {
             var obj = Instantiate(tilePrefabs[GetRandomTileIndex()], new Vector3(col, boardHeight + 1, 0), Quaternion.identity);
-            obj.GetComponent<TileManager>().AnimateFalling(countOfTilesToSpawn + 1);
+            obj.GetComponent<TileManager>().OnFall(countOfTilesToSpawn + 1);
         }
     }
 

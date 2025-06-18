@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8555730774691821272}
   - component: {fileID: 9023732283296112714}
   - component: {fileID: -7697155697281687318}
+  - component: {fileID: -3312984950098863353}
   m_Layer: 0
   m_Name: Heart Tile
   m_TagString: Heart
@@ -194,4 +195,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d097cbc4e7ef97a4293f5c2454051856, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  typeAsName: heart
+--- !u!114 &-3312984950098863353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8285118432283989281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21ecc4c2176a22445a3d6bb04bf3cf3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

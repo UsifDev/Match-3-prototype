@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 975954331694472094}
   - component: {fileID: 2978363826380566074}
   - component: {fileID: -3917253488833642860}
+  - component: {fileID: 2371694682881866425}
   m_Layer: 0
   m_Name: Circle Tile
   m_TagString: Circle
@@ -194,4 +195,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d097cbc4e7ef97a4293f5c2454051856, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  typeAsName: circle
+--- !u!114 &2371694682881866425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703698524285289500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21ecc4c2176a22445a3d6bb04bf3cf3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

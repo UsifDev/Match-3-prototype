@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -8769208045438932698}
   - component: {fileID: -709015142407586224}
   - component: {fileID: 4365036056678485663}
+  - component: {fileID: 1558121701388185920}
   m_Layer: 0
   m_Name: Triangle Tile
   m_TagString: Triangle
@@ -194,4 +195,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d097cbc4e7ef97a4293f5c2454051856, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  typeAsName: triangle
+--- !u!114 &1558121701388185920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5340235630351650466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21ecc4c2176a22445a3d6bb04bf3cf3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -6,9 +6,6 @@ namespace Tiles
 {
     public class TileAnimator : MonoBehaviour
     {
-        [Range(0f,1f)]
-        private const float ANIMSPEED = 0.5f; // ENCAPSULATION
-
         // ENCAPSULATION
         public bool IsBusy { 
             get {
@@ -34,6 +31,7 @@ namespace Tiles
         {
             if (!IsBusy)
             {
+                currentAnimationStrategy = null;
                 if (IsBeingDestroyed) 
                     gameObject.SendMessage("DestroyTile");
                 return;
@@ -45,7 +43,7 @@ namespace Tiles
         // POLYMORPHISM
         public void AnimateMovement(Vector3 other)
         {
-            if (targetPos != transform.position) return;
+            if (IsBusy) return;
             targetPos = other;
             currentAnimationStrategy = new MovingAnimation();
         }
@@ -53,7 +51,7 @@ namespace Tiles
         // POLYMORPHISM
         public void AnimateMovement(int countOfTilesToFall)
         {
-            if (targetPos != transform.position) return;
+            if (IsBusy) return;
             targetPos = new Vector3(transform.position.x, transform.position.y - countOfTilesToFall, 0);
             currentAnimationStrategy = new MovingAnimation();
         }
@@ -73,7 +71,9 @@ namespace Tiles
 
         // INHERITANCE
         class DeathAnimation : Animation
-        { 
+        {
+            float ANIMSPEED = 0.05f;
+
             public override void Animate(Transform transform, Vector3 targetPos)
             {
                 var tile = transform.gameObject;
@@ -85,7 +85,7 @@ namespace Tiles
                     return;
                 }
 
-                if (tile.transform.localScale.x > 0.01f)
+                if (tile.transform.localScale.x < 0.05f)
                 {
                     isBusy = false;
                 }
@@ -101,12 +101,25 @@ namespace Tiles
         // INHERITANCE
         class MovingAnimation : Animation
         {
+            int z = int.MaxValue;
+            const float MINRADIUS = 0.05f;
+            const float ANIMSPEED = 6f;
             public override void Animate(Transform transform, Vector3 targetPos)
             {
-                if (targetPos != transform.position)
-                    transform.Translate(Time.deltaTime * ANIMSPEED * targetPos.normalized);
-                else 
+                // since cross product in anti-commutative we can detect when the vector flips
+                if (z == float.PositiveInfinity) 
+                    z = Math.Sign(Vector3.Cross(transform.position, targetPos).z);
+                
+                var direction = targetPos - transform.position;
+                transform.Translate(Time.deltaTime * ANIMSPEED * direction.normalized);
+
+                if (Math.Sign(Vector3.Cross(transform.position, targetPos).z) == z ||
+                    transform.position == targetPos ||
+                    Vector3.Distance(transform.position, targetPos) <= MINRADIUS)
+                {
+                    transform.position = new Vector3((int)targetPos.x, (int)targetPos.y);
                     isBusy = false;
+                }
             }
         }
     }
