@@ -10,12 +10,11 @@ public class GameManager : MonoBehaviour
 
     private bool isRandomValue;
 
-    public enum GameState
-    {
-        IDLE,
-        SCANNING,
-    } 
-    public GameState state {  get; private set; }
+    public bool IsScanning { get; private set; } = false;
+
+    private bool isFindingMatches = false;
+    private bool isMatchFound = false;
+
 
     private TileManager SelectedTileManager { 
         get { return TileInputManager.SelectedTile.GetComponent<TileManager>(); } 
@@ -35,15 +34,33 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         SpawnManager.Instance.InitializeBoard(isRandomValue);
-        state = GameState.IDLE;
+        isFindingMatches = false;
+        isMatchFound = false;
+        IsScanning = false;
     }
-
     
     void Update()
     {
-        if (state == GameState.SCANNING && !SelectedTileManager.IsBusy && !TargetTileManager.IsBusy) 
+        if (TileInputManager.SelectedTile == null || TileInputManager.TargetTile == null) 
         {
-            state = GameState.IDLE;
+            IsScanning = false;
+            return;
+        }
+        if (IsScanning && !SelectedTileManager.IsBusy && !TargetTileManager.IsBusy) 
+        {
+            if (isFindingMatches)
+            {
+                FindMatches();
+                return;
+            }
+                
+            if(!isMatchFound) 
+            {
+                SelectedTileManager.OnSwap(TargetTileManager.transform.position);
+                TargetTileManager.OnSwap(SelectedTileManager.transform.position);
+            }
+
+            IsScanning = false;
         }
     }
 
@@ -52,65 +69,46 @@ public class GameManager : MonoBehaviour
         SelectedTileManager.OnSwap(TargetTileManager.transform.position);
         TargetTileManager.OnSwap(SelectedTileManager.transform.position);
 
-        state = GameState.SCANNING;
+        IsScanning = true;
+        isFindingMatches = true;
     }
 
-    //private void FindMatches()
-    //{
-    //    var matches = new HashSet<Vector2Int>();
+    private void FindMatches()
+    {
+        var flaggedTiles = new HashSet<TileManager>();
 
-    //    int startingX = (int) SelectedTileManager.transform.position.x - 2;
-    //    float startingY = SelectedTileManager.transform.position.y - 2;
+        for (int x = 2; x < W; x++)
+        {
+            for (int y = 2; y < H; y++)
+            {
+                var tile1 = NameAsPositionSetter.GetObject(x, y).GetComponent<TileManager>();
 
-    //    int rowsToScan = 5;
+                // Horizontal matches
+                var tile2 = NameAsPositionSetter.GetObject(x - 1, y).GetComponent<TileManager>();
+                var tile3 = NameAsPositionSetter.GetObject(x - 2, y).GetComponent<TileManager>();
+                if (tile1.CompareTag(tile2.tag) && tile1.CompareTag(tile3.tag))
+                    flaggedTiles.UnionWith(new[] { tile1, tile2, tile3 });
 
-    //    if (startingX > 0) {
+                // Vertical matches
+                tile2 = NameAsPositionSetter.GetObject(x, y - 1).GetComponent<TileManager>();
+                tile3 = NameAsPositionSetter.GetObject(x, y - 2).GetComponent<TileManager>();
+                if (tile1.CompareTag(tile2.tag) && tile1.CompareTag(tile3.tag))
+                    flaggedTiles.UnionWith(new[] { tile1, tile2, tile3 });
+            }
+        }
 
+        //iterate over flagged tiles
+        if (flaggedTiles.Count > 0)
+        {
+            isMatchFound = true;
+            foreach (var tile in flaggedTiles)
+            {
+                tile.OnMatch();
+            }
+        }
 
-    //        startingX = 0;
-    //    }
-
-    //    for (int x = 0; x < W; x++)
-    //    {
-    //        for (int y = 0; y < H; y++)
-    //        {
-    //            var tile1 = NameAsPositionSetter.GetObject(x, y);
-    //            var tile2 = NameAsPositionSetter.GetObject(x + 1, y);
-    //            var tile3 = NameAsPositionSetter.GetObject(x + 2, y);
-
-    //            // Horizontal matches
-    //            if (x < W - 2 &&
-    //                tile1.tag == tile2.tag &&
-    //                tile1.tag == tile3.tag)
-    //            {
-    //                SelectedTileManager
-    //            }
-
-    //            tile2 = NameAsPositionSetter.GetObject(x, y + 1);
-    //            tile3 = NameAsPositionSetter.GetObject(x, y + 2);
-
-    //            // Vertical matches
-    //            if (x < H - 2 &&
-    //                tile1.tag == tile2.tag &&
-    //                tile1.tag == tile3.tag)
-    //            {
-                    
-    //            }
-    //            // 
-    //            if (y < Height - 2 &&
-    //                TileTypes[x, y] == TileTypes[x, y + 1] &&
-    //                TileTypes[x, y] == TileTypes[x, y + 2])
-    //            {
-    //                matches.UnionWith(new[]
-    //                {
-    //                    new Vector2Int(x, y),
-    //                    new Vector2Int(x, y+1),
-    //                    new Vector2Int(x, y+2)
-    //                });
-    //            }
-    //        }
-    //    }
-    //}
+        isFindingMatches = false;
+    }
 
     public void Restart()
     {

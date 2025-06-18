@@ -23,7 +23,7 @@ public class TileInputManager : MonoBehaviour
         }
     }
 
-    public static GameObject SelectedTile {  get; private set; }
+    public static GameObject SelectedTile { get; private set; }
     public static GameObject TargetTile { get; private set; }
 
     void Start()
@@ -34,7 +34,7 @@ public class TileInputManager : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (GameManager.Instance.state == GameManager.GameState.SCANNING) return;
+        if (GameManager.Instance.IsScanning) return;
         if (IsBusy) return;
         firstTime = (float)Time.realtimeSinceStartup;
         SelectedTile = gameObject;
@@ -42,24 +42,24 @@ public class TileInputManager : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        if (GameManager.Instance.state == GameManager.GameState.SCANNING) return;
+        if (GameManager.Instance.IsScanning) return;
         isBeingDragged = true;
     }
 
     private void OnMouseEnter()
     {
-        if (GameManager.Instance.state == GameManager.GameState.SCANNING) return;
+        if (GameManager.Instance.IsScanning) return;
         if (!isBeingDragged && !IsBusy) TargetTile = gameObject;
     }
     private void OnMouseExit()
     {
-        if (GameManager.Instance.state == GameManager.GameState.SCANNING) return;
+        if (GameManager.Instance.IsScanning) return;
         if (!isBeingDragged) TargetTile = null;
     }
 
     private void OnMouseUp()
     {
-        if (GameManager.Instance.state == GameManager.GameState.SCANNING) return;
+        if (GameManager.Instance.IsScanning) return;
         if (!isBeingDragged) return;
         isBeingDragged = false;
 
@@ -77,7 +77,7 @@ public class TileInputManager : MonoBehaviour
 
     private void OnSwipe(InputValue touchValue)
     {
-        if (GameManager.Instance.state == GameManager.GameState.SCANNING) return;
+        if (GameManager.Instance.IsScanning) return;
         var touch = touchValue.Get<TouchState>();
         if (touch.phase != TouchPhase.Ended) return;
 
