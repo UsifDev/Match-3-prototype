@@ -13,6 +13,7 @@ public class TileManager : MonoBehaviour
 
     public void OnMatch()
     {
+        if (IsBusy) return;
         DestroyTile();
     }
 
@@ -25,6 +26,7 @@ public class TileManager : MonoBehaviour
     // ENCAPSULATION
     public void OnFall(int countOfTilesToFall)
     {
+        if (countOfTilesToFall <= 0) return;
         gameObject.GetComponent<TileAnimator>().AnimateMovement(countOfTilesToFall);
     }
 

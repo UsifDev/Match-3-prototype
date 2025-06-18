@@ -41,15 +41,14 @@ public class SpawnManager : MonoBehaviour
                 );
             }
         }
-        
     }
 
     public void SpawnTilesAtCol(int col, int countOfTilesToSpawn)
     {
         for (int i = 0; i < countOfTilesToSpawn; i++)
         {
-            var obj = Instantiate(tilePrefabs[GetRandomTileIndex()], new Vector3(col, boardHeight + 1, 0), Quaternion.identity);
-            obj.GetComponent<TileManager>().OnFall(countOfTilesToSpawn + 1);
+            var obj = Instantiate(tilePrefabs[GetRandomTileIndex()], new Vector3(col, boardHeight + i, 0), Quaternion.identity);
+            obj.GetComponent<TileManager>().OnFall(countOfTilesToSpawn);
         }
     }
 

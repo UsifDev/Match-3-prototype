@@ -7,6 +7,7 @@ namespace Tiles
     public class TileAnimator : MonoBehaviour
     {
         // ENCAPSULATION
+        [SerializeField]
         public bool IsBusy { 
             get {
                 if (currentAnimationStrategy == null) 
@@ -14,23 +15,24 @@ namespace Tiles
                 else 
                     return currentAnimationStrategy.isBusy;
             } 
-        } 
+        }
+        [SerializeField]
         public bool IsBeingDestroyed { get; private set; } // ENCAPSULATION
 
-        private Vector3 targetPos;
-        private Animation currentAnimationStrategy;
+        [SerializeField] private Vector3 targetPos;
+        [SerializeField] private Animation currentAnimationStrategy = null;
+
 
         void Start()
         {
-            targetPos = transform.position;
             IsBeingDestroyed = false;
-            currentAnimationStrategy = null;
         }
 
         void Update()
         {
             if (!IsBusy)
             {
+                targetPos = transform.position;
                 currentAnimationStrategy = null;
                 if (IsBeingDestroyed) 
                     gameObject.SendMessage("DestroyTile");
@@ -58,6 +60,7 @@ namespace Tiles
 
         public void OnDestroyTile()
         {
+            if (IsBusy) return;
             IsBeingDestroyed = true;
             currentAnimationStrategy = new DeathAnimation();
         }
@@ -103,7 +106,7 @@ namespace Tiles
         {
             int z = int.MaxValue;
             const float MINRADIUS = 0.05f;
-            const float ANIMSPEED = 6f;
+            const float ANIMSPEED = 10f;
             public override void Animate(Transform transform, Vector3 targetPos)
             {
                 // since cross product in anti-commutative we can detect when the vector flips

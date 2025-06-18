@@ -14,17 +14,18 @@ public class GameManager : MonoBehaviour
 
     private bool isFindingMatches = false;
     private bool isMatchFound = false;
-
+    private bool isRegenerating = false;
 
     private TileManager SelectedTileManager { 
-        get { return TileInputManager.SelectedTile.GetComponent<TileManager>(); } 
+        get { return TileInputManager.SelectedTile?.GetComponent<TileManager>(); } 
     }
     private TileManager TargetTileManager
     {
-        get { return TileInputManager.TargetTile.GetComponent<TileManager>(); }
+        get { return TileInputManager.TargetTile?.GetComponent<TileManager>(); }
     }
     private int W { get { return SpawnManager.boardWidth; } }
     private int H { get { return SpawnManager.boardHeight; } }
+
     public static GameManager Instance { get; private set; } // ENCAPSULATION
     private void Awake()
     {
@@ -37,29 +38,50 @@ public class GameManager : MonoBehaviour
         isFindingMatches = false;
         isMatchFound = false;
         IsScanning = false;
+        isRegenerating = false;
     }
     
     void Update()
     {
-        if (TileInputManager.SelectedTile == null || TileInputManager.TargetTile == null) 
+        // check if we got a match out of our specials swapping
+        if (isMatchFound)
+        {
+            // if so, start regenerating and if this is a frame where we are done generating, re-evaluate the board
+            if (isRegenerating)
+            {
+                regenerateBoard();
+            }
+            else
+            {
+                // check all tiles to make sure none are busy before re-evaluating
+                for (int x = 0; x < W; x++)
+                    for (int y = 0; y < H; y++)
+                        if(NameAsPositionSetter.GetObject(x, y) == null || NameAsPositionSetter.GetObject(x, y).GetComponent<TileManager>().IsBusy)
+                            return;
+
+                FindMatches();
+            }
+            return;
+        }
+        
+        // specials have died so stop scanning and allow user input
+        if (TileInputManager.SelectedTile == null || TileInputManager.TargetTile == null)
         {
             IsScanning = false;
             return;
         }
-        if (IsScanning && !SelectedTileManager.IsBusy && !TargetTileManager.IsBusy) 
-        {
-            if (isFindingMatches)
-            {
-                FindMatches();
-                return;
-            }
-                
-            if(!isMatchFound) 
-            {
-                SelectedTileManager.OnSwap(TargetTileManager.transform.position);
-                TargetTileManager.OnSwap(SelectedTileManager.transform.position);
-            }
 
+        // specials are animating
+        if (SelectedTileManager.IsBusy && TargetTileManager.IsBusy) return;
+        
+        // specials have attempted to swap
+        if (!IsScanning) return;
+        if(isFindingMatches) 
+            FindMatches();
+        else
+        {
+            SelectedTileManager.OnSwap(TargetTileManager.transform.position);
+            TargetTileManager.OnSwap(SelectedTileManager.transform.position);
             IsScanning = false;
         }
     }
@@ -77,23 +99,31 @@ public class GameManager : MonoBehaviour
     {
         var flaggedTiles = new HashSet<TileManager>();
 
-        for (int x = 2; x < W; x++)
+        for (int x = 0; x < W; x++)
         {
-            for (int y = 2; y < H; y++)
+            for (int y = 0; y < H; y++)
             {
-                var tile1 = NameAsPositionSetter.GetObject(x, y).GetComponent<TileManager>();
+                TileManager tile1 = NameAsPositionSetter.GetObject(x, y).GetComponent<TileManager>();
+                TileManager tile2 = null;
+                TileManager tile3 = null;
 
                 // Horizontal matches
-                var tile2 = NameAsPositionSetter.GetObject(x - 1, y).GetComponent<TileManager>();
-                var tile3 = NameAsPositionSetter.GetObject(x - 2, y).GetComponent<TileManager>();
-                if (tile1.CompareTag(tile2.tag) && tile1.CompareTag(tile3.tag))
-                    flaggedTiles.UnionWith(new[] { tile1, tile2, tile3 });
+                if (x < W - 2)
+                {
+                    tile2 = NameAsPositionSetter.GetObject(x + 1, y).GetComponent<TileManager>();
+                    tile3 = NameAsPositionSetter.GetObject(x + 2, y).GetComponent<TileManager>();
+                    if (tile1.CompareTag(tile2.tag) && tile1.CompareTag(tile3.tag))
+                        flaggedTiles.UnionWith(new[] { tile1, tile2, tile3 });
+                }
 
                 // Vertical matches
-                tile2 = NameAsPositionSetter.GetObject(x, y - 1).GetComponent<TileManager>();
-                tile3 = NameAsPositionSetter.GetObject(x, y - 2).GetComponent<TileManager>();
-                if (tile1.CompareTag(tile2.tag) && tile1.CompareTag(tile3.tag))
-                    flaggedTiles.UnionWith(new[] { tile1, tile2, tile3 });
+                if (y < H - 2)
+                {
+                    tile2 = NameAsPositionSetter.GetObject(x, y + 1).GetComponent<TileManager>();
+                    tile3 = NameAsPositionSetter.GetObject(x, y + 2).GetComponent<TileManager>();
+                    if (tile1.CompareTag(tile2.tag) && tile1.CompareTag(tile3.tag))
+                        flaggedTiles.UnionWith(new[] { tile1, tile2, tile3 });
+                }
             }
         }
 
@@ -101,13 +131,36 @@ public class GameManager : MonoBehaviour
         if (flaggedTiles.Count > 0)
         {
             isMatchFound = true;
+            isRegenerating = true;
             foreach (var tile in flaggedTiles)
             {
                 tile.OnMatch();
             }
         }
+        else
+        {
+            isMatchFound = false;
+        }
 
         isFindingMatches = false;
+    }
+
+    private void regenerateBoard()
+    {
+        for (int x = 0; x < W; x++)
+        {
+            int countOfTilesToFall = 0;
+            for (int y = 0; y < H; y++)
+            {
+                var obj = NameAsPositionSetter.GetObject(x, y);
+                if (obj == null) 
+                    countOfTilesToFall++;
+                else 
+                    obj.GetComponent<TileManager>().OnFall(countOfTilesToFall);
+            }
+            SpawnManager.Instance.SpawnTilesAtCol(x, countOfTilesToFall);
+        }
+        isRegenerating = false;
     }
 
     public void Restart()
