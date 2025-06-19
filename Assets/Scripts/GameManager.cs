@@ -7,9 +7,6 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private Toggle isRandomToggle;
     [SerializeField] private InputField rngSeedInputField;
-
-    private bool isRandomValue;
-
     public bool IsScanning { get; private set; } = false;
 
     private bool isFindingMatches = false;
@@ -34,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        SpawnManager.Instance.InitializeBoard(isRandomValue);
+        SpawnManager.Instance.InitializeBoard();
         isFindingMatches = false;
         isMatchFound = false;
         IsScanning = false;

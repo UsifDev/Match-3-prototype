@@ -23,7 +23,7 @@ public class ToggleSpriteSwap : MonoBehaviour
         targetImage = GetComponent<Image>();
         button = GetComponent<Button>(); 
         button.transition = Selectable.Transition.None; 
-        button.onClick.AddListener(OnClick); 
+        button.onClick.AddListener(OnClick);
     } 
 
     void OnClick() 

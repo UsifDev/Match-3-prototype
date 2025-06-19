@@ -6,6 +6,8 @@ public class GeneralSettingsManager : MonoBehaviour
     // Data to persist
     public bool isMusicOn = true;
     public bool isSoundOn = true;
+    public bool isRandomOn = false;
+    public int rngSeed;
 
 
     // Singleton Pattern
@@ -41,6 +43,9 @@ public class GeneralSettingsManager : MonoBehaviour
 
     public void Load()
     {
+        Random.InitState(0);
+        rngSeed = 0;
+
         string path = Application.persistentDataPath + "/savefile.json";
         if (File.Exists(path))
         {
@@ -48,6 +53,7 @@ public class GeneralSettingsManager : MonoBehaviour
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
             // load data from storage below like this: name = data.name;
+
         }
     }
 }

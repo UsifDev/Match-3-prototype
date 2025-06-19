@@ -12,10 +12,6 @@ public class SpawnManager : MonoBehaviour
 
     private int[,]  tileTypes = new int[boardWidth, boardHeight];
 
-    // ENCAPSULATION
-    private int rngSeed = 42;
-    public int RNGSeed { get { return rngSeed; } set { rngSeed = value; } }
-
     public static SpawnManager Instance { get; private set; } // ENCAPSULATION
     private void Awake()
     {
@@ -23,10 +19,12 @@ public class SpawnManager : MonoBehaviour
     }
 
     // Board initializer
-    public void InitializeBoard(bool isRandomValue)
+    public void InitializeBoard()
     {
-        if (isRandomValue) Random.InitState((int)Time.time);
-        else Random.InitState(rngSeed);
+        if (GeneralSettingsManager.Instance.isRandomOn)
+            GeneralSettingsManager.Instance.rngSeed = (int)Time.time;
+
+        Random.InitState(GeneralSettingsManager.Instance.rngSeed);
 
         for (int x = 0; x < boardWidth; x++)
         {

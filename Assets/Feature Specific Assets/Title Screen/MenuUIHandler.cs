@@ -31,11 +31,10 @@ public class MenuUIHandler : MonoBehaviour
         soundButton.onValueChanged -= UpdateSoundSetting;
     }
 
-    public void StartNew()
+    public void LoadNext(string nextSceneName)
     {
         UnSub();
-
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(nextSceneName);
     }
 
     public void Exit()
