@@ -11,6 +11,14 @@ public class TileManager : MonoBehaviour
         }
     }
 
+    public bool IsBeingDestroyed
+    {
+        get
+        {
+            return gameObject.GetComponent<TileAnimator>().IsBeingDestroyed;
+        }
+    }
+
     public void OnMatch()
     {
         if (IsBusy) return;

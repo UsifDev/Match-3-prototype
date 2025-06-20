@@ -34,7 +34,7 @@ public class SpawnManager : MonoBehaviour
                 int tileType = tileTypes[x, y];
                 Instantiate(
                     tilePrefabs[tileType],
-                    new Vector3(x, y, 0),
+                    new Vector3(x, y , 0) * GameManager.GameScaling,
                     Quaternion.identity
                 );
             }
@@ -45,7 +45,7 @@ public class SpawnManager : MonoBehaviour
     {
         for (int i = 0; i < countOfTilesToSpawn; i++)
         {
-            var obj = Instantiate(tilePrefabs[GetRandomTileIndex()], new Vector3(col, boardHeight + i, 0), Quaternion.identity);
+            var obj = Instantiate(tilePrefabs[GetRandomTileIndex()], new Vector3(col, boardHeight + i, 0) * GameManager.GameScaling, Quaternion.identity);
             obj.GetComponent<TileManager>().OnFall(countOfTilesToSpawn);
         }
     }

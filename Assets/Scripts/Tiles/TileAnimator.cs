@@ -7,7 +7,6 @@ namespace Tiles
     public class TileAnimator : MonoBehaviour
     {
         // ENCAPSULATION
-        [SerializeField]
         public bool IsBusy { 
             get {
                 if (currentAnimationStrategy == null) 
@@ -16,11 +15,10 @@ namespace Tiles
                     return currentAnimationStrategy.isBusy;
             } 
         }
-        [SerializeField]
         public bool IsBeingDestroyed { get; private set; } // ENCAPSULATION
 
-        [SerializeField] private Vector3 targetPos;
-        [SerializeField] private Animation currentAnimationStrategy = null;
+        private Vector3 targetPos;
+        private Animation currentAnimationStrategy = null;
 
 
         void Start()
@@ -54,7 +52,7 @@ namespace Tiles
         public void AnimateMovement(int countOfTilesToFall)
         {
             if (IsBusy) return;
-            targetPos = new Vector3(transform.position.x, transform.position.y - countOfTilesToFall, 0);
+            targetPos = new Vector3(transform.position.x, transform.position.y - (countOfTilesToFall * GameManager.GameScaling), 0);
             currentAnimationStrategy = new MovingAnimation();
         }
 
@@ -97,7 +95,7 @@ namespace Tiles
                 Vector3 startScale = tile.transform.localScale;
 
                 spriteRenderer.color = Color.Lerp(startColor, Color.clear, ANIMSPEED);
-                tile.transform.localScale = Vector3.Lerp(startScale, Vector3.zero, ANIMSPEED);
+                tile.transform.localScale = Vector3.Lerp(startScale, Vector3.zero, ANIMSPEED * GameManager.GameScaling);
             }
         }
 
@@ -106,7 +104,7 @@ namespace Tiles
         {
             int z = int.MaxValue;
             const float MINRADIUS = 0.05f;
-            const float ANIMSPEED = 10f;
+            const float ANIMSPEED = 9f;
             public override void Animate(Transform transform, Vector3 targetPos)
             {
                 // since cross product in anti-commutative we can detect when the vector flips
@@ -114,11 +112,11 @@ namespace Tiles
                     z = Math.Sign(Vector3.Cross(transform.position, targetPos).z);
                 
                 var direction = targetPos - transform.position;
-                transform.Translate(Time.deltaTime * ANIMSPEED * direction.normalized);
+                transform.Translate(Time.deltaTime * ANIMSPEED * direction.normalized * GameManager.GameScaling);
 
                 if (Math.Sign(Vector3.Cross(transform.position, targetPos).z) == z ||
                     transform.position == targetPos ||
-                    Vector3.Distance(transform.position, targetPos) <= MINRADIUS)
+                    Vector3.Distance(transform.position, targetPos) <= MINRADIUS * GameManager.GameScaling)
                 {
                     transform.position = new Vector3((int)targetPos.x, (int)targetPos.y);
                     isBusy = false;

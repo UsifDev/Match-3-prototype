@@ -9,17 +9,17 @@ public class NameAsPositionSetter : MonoBehaviour
 
     void Update()
     {
-        if (gameObject.name != transform.position.x + "," + transform.position.y) ResetName();
+        if (gameObject.name != transform.position.x / GameManager.GameScaling + "," + transform.position.y / GameManager.GameScaling) ResetName();
     }
 
     void ResetName()
     {
-        gameObject.name = "" + transform.position.x + "," + transform.position.y;
+        gameObject.name = "" + transform.position.x / GameManager.GameScaling + "," + transform.position.y / GameManager.GameScaling;
     }
 
     public static bool CompareNameWithVector(GameObject obj, Vector3 pos)
     {
-        return obj.name == (int) pos.x + "," + (int) pos.y;
+        return obj.name == Mathf.RoundToInt(pos.x) + "," + Mathf.RoundToInt(pos.y);
     }
 
     public static GameObject GetObject(Vector3 pos)

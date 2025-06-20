@@ -10,10 +10,19 @@ public class MenuUIHandler : MonoBehaviour
     [SerializeField] private ToggleSpriteSwap musicButton;
     [SerializeField] private ToggleSpriteSwap soundButton;
 
+    [SerializeField] private AudioClip buttonPressClip;
+    private AudioSource menuSoundsPlayer;
+
     void Start()
     {
         musicButton.onValueChanged += UpdateMusicSetting;
         soundButton.onValueChanged += UpdateSoundSetting;
+        menuSoundsPlayer = GetComponent<AudioSource>();
+    }
+
+    public void PlaySound()
+    {
+        if(GeneralSettingsManager.Instance.isSoundOn) menuSoundsPlayer.PlayOneShot(buttonPressClip, 0.2f);
     }
 
     private void UpdateSoundSetting(bool isOn)
@@ -23,6 +32,7 @@ public class MenuUIHandler : MonoBehaviour
     private void UpdateMusicSetting(bool isOn)
     {
         GeneralSettingsManager.Instance.isMusicOn = isOn;
+        PersistBackground.Instance.OnUpdateMusic(isOn);
     }
 
     private void UnSub()

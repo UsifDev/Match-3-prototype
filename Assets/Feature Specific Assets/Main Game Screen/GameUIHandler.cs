@@ -1,19 +1,23 @@
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(1000)]
 public class GameUIHandler : MonoBehaviour
 {
-
     [SerializeField] private ToggleSpriteSwap randomizationButton;
 
+    [SerializeField] private AudioClip buttonPressClip;
+    private AudioSource gameUIsoundsPlayer;
     void Start()
     {
         randomizationButton.onValueChanged += UpdateRandomizationSetting;
         randomizationButton.IsOn = GeneralSettingsManager.Instance.isRandomOn;
+        gameUIsoundsPlayer = GetComponent<AudioSource>();
+    }
+
+    public void PlaySound()
+    {
+        if (GeneralSettingsManager.Instance.isSoundOn) gameUIsoundsPlayer.PlayOneShot(buttonPressClip, 0.2f);
     }
 
     private void UpdateRandomizationSetting(bool isOn)
@@ -21,26 +25,9 @@ public class GameUIHandler : MonoBehaviour
         GeneralSettingsManager.Instance.isRandomOn = isOn;
     }
 
-    private void UnSub()
-    {
-        randomizationButton.onValueChanged -= UpdateRandomizationSetting;
-    }
-
     public void LoadNext(string nextSceneName)
     {
-        UnSub();
+        randomizationButton.onValueChanged -= UpdateRandomizationSetting;
         SceneManager.LoadScene(nextSceneName);
     }
-
-    public void Exit()
-    {
-        UnSub();
-
-#if UNITY_EDITOR
-        EditorApplication.ExitPlaymode();
-#else
-        Application.Quit();
-#endif
-    }
-
 }

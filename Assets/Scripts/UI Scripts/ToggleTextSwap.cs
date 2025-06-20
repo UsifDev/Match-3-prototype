@@ -14,7 +14,6 @@ public class ToggleTextSwap : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(targetText.text);
         button = GetComponent<Button>();
         button.transition = Selectable.Transition.None;
 
@@ -28,12 +27,7 @@ public class ToggleTextSwap : MonoBehaviour
         targetText.text = isOn ? onText : offText;
     }
 
-    private void OnEnable()
-    {
-        toggleButton.onValueChanged += UpdateValue;
-    }
-
-    private void OnDisable()
+    private void OnDestroy()
     {
         toggleButton.onValueChanged -= UpdateValue;
     }
